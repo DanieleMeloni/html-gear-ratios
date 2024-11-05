@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bicycle Utility</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+
+      body {
+        background-color: antiquewhite;
+        font-family: calibri;
+      }
+      table, th, td {
+        border: 1px solid rgba(117, 10, 10, 0.3);
+      }
+      div {
+        width: 100%;
+        margin-bottom: 50px;
+                
+      }
+
+      h1 {        
+        text-align: center;
+        font-size: 50px;
+        font-family: Calibri;
+        color:darkred;
+        
+      }
+      label {
+        margin-left: auto;
+       
+        width: 10%px;       
+        
+        line-height: 10px; 
+        vertical-align: top ;
+        
+        
+        font-size: 20px;
+        font-weight: bold;        
+        
+        margin-top: 11px;
+        margin-bottom: 11px;
+        margin-right: 30px;
+        margin-left: 30px;        
+      }
+
+      textarea {
+        width: 70%;
+        
+        margin-right: auto;
+        border-radius: 7px;
+        border: 0px;
+        background-color: aliceblue;        
+        outline-color: rgb(151, 206, 240);
+        margin-bottom: 20px;        
+      }
+
+      button {
+        width: 30%;
+        margin-left: 35%;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border: none;
+        color:antiquewhite;
+        background-color: darkred;
+        border-radius: 10px;
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      #js-tableRatio{
+        align-items: center;
+        border-color: darkred;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+      }
+    </style>
+
+  </head>
+  <body>
+    <!--head-->
+    <div
+    class="head">  
+      <h1>Gear Ratios</h1>
+           
+      <label>
+        Front gears
+      </label>
+      
+      <textarea      
+      id="js-textarea-frontGear" 
+      autofocus="autofocus" 
+      cols="60"
+      rows="2"
+      style="resize:none"
+      placeholder="Please insert the numbers of gears theeth, use the caracter '-' for range and ',' for single gear"
+      ></textarea>
+      
+      <br>      
+      <label>Rear gears</label>
+
+      <textarea
+      
+      id="js-textarea-rearGear" 
+      autofocus="autofocus" 
+      cols="60"
+      rows="2"
+      style="resize:none"
+      placeholder="Please insert the numbers of gears theeth, use the caracter '-' for range and ',' for single gear"
+      ></textarea>
+      
+      <br>
+      <button onclick="tableGenerate();">Generate</button>
+      
+      
+      <br>     
+
+    </div>
+    
+    <div>
+      <table
+        id="js-tableRatio">
+          
+      </table>
+  </div>
+
+    <script>
+      
+      // 'checkIn' function chek if any there are any characters not allowed in that case the progame does not generate the ratio table,
+      // whether the string does not include any characters not allowed return a string 'newStringGears' that will be proccessed.
+      function checkIn (textGears, idAreaText) {        
+        const characters = ['1', '2','3','4','5','6','7','8','9','0','-',' ',','];
+        let newStringGears = '';
+        
+        for (let i = 0; i < textGears.length; i++) {
+          if (characters.includes(textGears[i])) {           
+            newStringGears = newStringGears + textGears[i]; 
+            
+            } else {   
+            
+            document.getElementById(idAreaText).value = '';
+            newStringGears = '';
+            break;
+          };      
+        };
+        return newStringGears;      
+      };
+
+
+      function listMaker(textGears) {
+        //Erase all spaces from the string
+        textGears = textGears.replace(/\s/g, '');
+        
+        //Two while loop that erase the characters ',' and '-' from the begine and the end of the string
+        while ([',', '-'].includes(textGears[0])) {
+          textGears = textGears.slice(1);
+        };
+        while ([',', '-'].includes(textGears[textGears.length - 1])) {
+          textGears = textGears.slice(0, -1);
+        };
+        
+        //erase the value equal to '0' and the empty '' element from the list        
+        let listGears = textGears.split(',');        
+        // erase all empty positions
+        listGears = listGears.filter(item => item !== '');       
+
+        
+        let newListGears = [];
+        let listRange = [];
+        let maxValueRange = 0;
+        let minValueRange = 0;
+        for (let i = 0; i < listGears.length; i++) {           
+          // If statment that serch for elemnt tat contain '-' character
+          if (listGears[i].search('-') !== -1) {                 
+            listRange = listGears[i].split('-');
+            listRange = listRange.filter(value => value !== '');
+            // If statement that change the values of 'listRange' in numeric
+            if (listRange.length > 0) {
+              for (let j = 0; j < listRange.length; j++) {               
+                listRange[j] = Number(listRange[j]);                
+              }
+              
+              maxValueRange = listRange.reduce((a, b) => Math.max(a, b));
+              minValueRange = listRange.reduce((a, b) => Math.min(a, b));
+              
+              // For loop that insert the new values
+              for (let j = minValueRange; j <= maxValueRange; j++) {
+                newListGears.push(j);
+              }              
+            }  
+            
+          } else {
+            newListGears.push(Number(listGears[i]));            
+          }          
+        };
+        // filter values equal to zero
+        newListGears = newListGears.filter(item => item !== 0);
+        // filter duplicate from the newListGear
+        //newListGears = [...new Set(newListGears)];
+        return newListGears;         
+      };
+
+      
+      function tableGenerate() {        
+        
+        let frontGearsText = document.getElementById("js-textarea-frontGear").value;
+        
+
+        let rearGearsText = document.getElementById("js-textarea-rearGear").value;
+        
+
+        frontGearsText = checkIn(frontGearsText,'js-textarea-frontGear');
+        rearGearsText = checkIn(rearGearsText,'js-textarea-rearGear');
+        
+        let frontGearsList = listMaker(frontGearsText);
+        let rearGearsList = listMaker(rearGearsText);
+        
+        let headersTable = ['Front/Rear'].concat(rearGearsList);
+        
+        let data = [];
+        let dataRow = [];
+        if (frontGearsList.length > 0 && rearGearsList.length > 0) {          
+          for (let i = 0; i < frontGearsList.length; i++) { 
+            dataRow.push(frontGearsList[i]);           
+            for (let j = 0; j < rearGearsList.length; j++) {
+              dataRow.push((Math.round((frontGearsList[i]/rearGearsList[j])*1000)/1000));
+            };
+            data.push(dataRow);
+            dataRow = [];
+          }            
+          
+
+          // Definision and assigment of html table element
+          
+          let tableRatio = document.getElementById('js-tableRatio');
+          //reset RatioTable
+          document.getElementById("js-tableRatio").innerHTML = "";     
+          
+          let tRow = tableRatio.insertRow(0); 
+          let tCell = NaN;
+          
+          // head of the table
+          for (let i = 0; i < headersTable.length; i++) {
+            tCell = tRow.insertCell(i);
+            let cell = document.createTextNode(headersTable[i]);
+            tCell.appendChild(cell);
+          };
+          tRow.appendChild(tCell);
+          
+          for (let i = 0; i < data.length; i++) {
+            tRow = tableRatio.insertRow(i+1);
+            for(let j = 0; j < data[i].length; j++) {
+              tCell = tRow.insertCell(j);
+              let cell = document.createTextNode(data[i][j]);
+              tCell.appendChild(cell);
+            };
+            tRow.appendChild(tCell);           
+          };      
+        
+        };
+        
+        
+      };
+    </script>
+  </body>
+</html>
