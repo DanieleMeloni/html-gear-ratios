@@ -13,11 +13,20 @@
       table, th, td {
         border: 1px solid rgba(117, 10, 10, 0.3);
       }
-      div {
-        width: 100%;
-        margin-bottom: 50px;
-                
+      .head {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;                
       }
+
+      .head > div {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        justify-content: center
+        
+
+;      }
 
       h1 {        
         text-align: center;
@@ -26,38 +35,35 @@
         color:darkred;
         
       }
-      label {
-        margin-left: auto;
-       
-        width: 10%px;       
-        
-        line-height: 10px; 
-        vertical-align: top ;
-        
+      label {           
+        display:inline-flex;
+        flex-basis: 100px;          
         
         font-size: 20px;
         font-weight: bold;        
         
-        margin-top: 11px;
-        margin-bottom: 11px;
-        margin-right: 30px;
-        margin-left: 30px;        
+        
+        margin-left: 5%; 
+              
       }
+
+      
 
       textarea {
         width: 70%;
+        flex-basis: 500px; 
         
-        margin-right: auto;
+        
         border-radius: 7px;
         border: 0px;
         background-color: aliceblue;        
         outline-color: rgb(151, 206, 240);
-        margin-bottom: 20px;        
+        margin-right: 5%;
       }
 
       button {
-        width: 30%;
-        margin-left: 35%;
+        width: 25%;        
+        align-self: center;
         padding-top: 10px;
         padding-bottom: 10px;
         border: none;
@@ -66,9 +72,10 @@
         border-radius: 10px;
         font-size: 20px;
         font-weight: bold;
+        
       }
 
-      #js-tableRatio{
+      #js-tableRatio {
         align-items: center;
         border-color: darkred;
         margin-left: auto;
@@ -83,32 +90,35 @@
     <div
     class="head">  
       <h1>Gear Ratios</h1>
-           
-      <label>
-        Front gears
-      </label>
-      
-      <textarea      
-      id="js-textarea-frontGear" 
-      autofocus="autofocus" 
-      cols="60"
-      rows="2"
-      style="resize:none"
-      placeholder="Please insert the numbers of gears theeth, use the caracter '-' for range and ',' for single gear"
-      ></textarea>
+      <div id="front-gears-container">    
+        <label>
+          Front gears
+        </label>
+        
+        <textarea      
+        id="js-textarea-frontGear" 
+        autofocus="autofocus" 
+        cols="60"
+        rows="2"
+        style="resize:none"
+        placeholder="Please insert the numbers of gears theeth, use the caracter '-' for range and ',' for single gear"
+        ></textarea>
+      </div> 
       
       <br>      
-      <label>Rear gears</label>
-
-      <textarea
       
-      id="js-textarea-rearGear" 
-      autofocus="autofocus" 
-      cols="60"
-      rows="2"
-      style="resize:none"
-      placeholder="Please insert the numbers of gears theeth, use the caracter '-' for range and ',' for single gear"
-      ></textarea>
+      <div id="rear-gears-container">
+        <label id="rear-label">Rear gears</label>
+
+        <textarea      
+        id="js-textarea-rearGear" 
+        autofocus="autofocus" 
+        cols="60"
+        rows="2"
+        style="resize:none"
+        placeholder="Please insert the numbers of gears theeth, use the caracter '-' for range and ',' for single gear"
+        ></textarea>
+      </div>
       
       <br>
       <button onclick="tableGenerate();">Generate</button>
